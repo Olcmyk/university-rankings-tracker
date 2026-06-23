@@ -7,6 +7,9 @@
     "doc": "docs"
   },
   "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
     "test": "vitest",
     "test:watch": "jest --watch",
     "clean-data": "node scripts/clean_data.js",
@@ -18,17 +21,28 @@
   "type": "module",
   "dependencies": {
     "chalk": "^4.1.2",
+    "chart.js": "^4.5.1",
     "fast-csv": "^5.0.7",
+    "fuse.js": "^7.4.2",
     "papaparse": "^5.5.4",
+    "react": "^19.2.7",
+    "react-chartjs-2": "^5.3.1",
+    "react-dom": "^19.2.7",
+    "react-router-dom": "^7.18.0",
     "string-similarity": "^4.0.4",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@babel/core": "^8.0.1",
     "@babel/preset-env": "^8.0.2",
+    "@vitejs/plugin-react": "^6.0.3",
+    "autoprefixer": "^10.5.0",
     "babel-jest": "^30.4.1",
     "csv-parser": "^3.2.1",
     "jest": "^30.4.2",
+    "postcss": "^8.5.15",
+    "tailwindcss": "^4.3.1",
+    "vite": "^8.0.16",
     "vitest": "^4.1.9"
   }
 }
