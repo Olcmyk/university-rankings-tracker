@@ -7,14 +7,15 @@
     "doc": "docs"
   },
   "scripts": {
-    "test": "jest",
+    "test": "vitest",
     "test:watch": "jest --watch",
-    "clean-data": "node scripts/clean_data.js"
+    "clean-data": "node scripts/clean_data.js",
+    "process-data": "node scripts/processData.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "dependencies": {
     "chalk": "^4.1.2",
     "fast-csv": "^5.0.7",
@@ -26,6 +27,8 @@
     "@babel/core": "^8.0.1",
     "@babel/preset-env": "^8.0.2",
     "babel-jest": "^30.4.1",
-    "jest": "^30.4.2"
+    "csv-parser": "^3.2.1",
+    "jest": "^30.4.2",
+    "vitest": "^4.1.9"
   }
 }
