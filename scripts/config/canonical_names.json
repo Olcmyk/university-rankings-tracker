@@ -1,0 +1,10 @@
+{
+  "_comment": "Canonical university names mapping. Format: 'Canonical Name': ['alias1', 'alias2']",
+  "Massachusetts Institute of Technology": [
+    "MIT",
+    "Massachusetts Institute of Technology (MIT)"
+  ],
+  "Harvard University": [
+    "Harvard"
+  ]
+}
