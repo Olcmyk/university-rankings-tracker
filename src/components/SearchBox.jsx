@@ -92,6 +92,7 @@ export function SearchBox({ universities, onSelect }) {
     <div className="relative w-full max-w-2xl mx-auto">
       <input
         ref={inputRef}
+        id="university-search"
         type="search"
         role="combobox"
         aria-label="Search universities"

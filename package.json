@@ -13,7 +13,8 @@
     "test": "vitest",
     "test:watch": "jest --watch",
     "clean-data": "node scripts/clean_data.js",
-    "process-data": "node scripts/processData.js"
+    "process-data": "node scripts/processData.js",
+    "prebuild": "npm run process-data"
   },
   "keywords": [],
   "author": "",
@@ -35,7 +36,9 @@
   "devDependencies": {
     "@babel/core": "^8.0.1",
     "@babel/preset-env": "^8.0.2",
+    "@tailwindcss/postcss": "^4.3.1",
     "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@vitejs/plugin-react": "^6.0.3",
     "autoprefixer": "^10.5.0",
