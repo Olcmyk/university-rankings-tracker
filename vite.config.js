@@ -6,11 +6,16 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          'chart': ['chart.js', 'react-chartjs-2'],
-          'search': ['fuse.js'],
+        manualChunks: (id) => {
+          if (id.includes('chart.js') || id.includes('react-chartjs-2')) {
+            return 'chart';
+          }
+          if (id.includes('fuse.js')) {
+            return 'search';
+          }
         },
       },
     },
   },
 })
+

@@ -13,8 +13,12 @@ export default {
       },
       maxWidth: {
         'content': '1200px',
+      },
+      spacing: {
+        'content': '1200px',
       }
     },
   },
   plugins: [],
 }
+
