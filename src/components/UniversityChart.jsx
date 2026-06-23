@@ -27,6 +27,21 @@ ChartJS.register(
 
 export function UniversityChart({ universityData, timeRange, visibleSystems, useLogScale }) {
 
+  // Store displayRank data for tooltips
+  const displayRankData = useMemo(() => {
+    const currentYear = new Date().getFullYear();
+
+    const qsData = filterByTimeRange(universityData.rankings.qs, timeRange, currentYear);
+    const theData = filterByTimeRange(universityData.rankings.the, timeRange, currentYear);
+    const arwuData = filterByTimeRange(universityData.rankings.arwu, timeRange, currentYear);
+
+    return {
+      qs: new Map(qsData.map(r => [r.year, r.displayRank])),
+      the: new Map(theData.map(r => [r.year, r.displayRank])),
+      arwu: new Map(arwuData.map(r => [r.year, r.displayRank])),
+    };
+  }, [universityData, timeRange]);
+
   const chartData = useMemo(() => {
     // Get current year for filtering
     const currentYear = new Date().getFullYear();
@@ -123,8 +138,22 @@ export function UniversityChart({ universityData, timeRange, visibleSystems, use
         callbacks: {
           label: (context) => {
             const label = context.dataset.label || '';
-            const value = context.parsed.y;
-            return value !== null ? `${label}: ${Math.round(value)}` : null;
+            const year = context.label;
+
+            // Determine which ranking system this is
+            let systemKey = '';
+            if (label.includes('QS')) systemKey = 'qs';
+            else if (label.includes('THE') || label.includes('Higher Education')) systemKey = 'the';
+            else if (label.includes('ARWU') || label.includes('Shanghai')) systemKey = 'arwu';
+
+            // Get the display rank from our stored data
+            const displayRank = displayRankData[systemKey]?.get(parseInt(year));
+
+            if (displayRank) {
+              return `${label}: ${displayRank}`;
+            }
+
+            return null;
           },
         },
       },
