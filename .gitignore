@@ -27,6 +27,3 @@ yarn-error.log*
 
 # Scripts output
 scripts/output/
-
-# Generated data (will be created by script)
-public/data/rankings.json
