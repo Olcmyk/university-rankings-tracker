@@ -13,8 +13,7 @@
     "test": "vitest",
     "test:watch": "jest --watch",
     "clean-data": "node scripts/clean_data.js",
-    "process-data": "node scripts/processData.js",
-    "prebuild": "npm run process-data"
+    "process-data": "node scripts/processData.js"
   },
   "keywords": [],
   "author": "",
