@@ -24,7 +24,7 @@ async function main() {
 
     console.log(chalk.yellow('\n📖 Parsing THE rankings...'));
     const theData = await parseTHE(canonicalDict);
-    console.log(chalk.green(`✓ THE: ${theData.records.length} records, ${theData.skipped.length} skipped`));
+    console.log(chalk.green(`✓ THE: ${theData.records.length} records, ${theData.skipped.length} skipped, ${theData.excluded.length} excluded (Reporter status)`));
 
     console.log(chalk.yellow('\n📖 Parsing ARWU rankings...'));
     const arwuData = await parseARWU(canonicalDict);
@@ -40,9 +40,10 @@ async function main() {
     console.log(chalk.yellow('\n📝 Generating reports...'));
     const allResults = { QS: qsValidation, THE: theValidation, ARWU: arwuValidation };
     const allSkipped = { QS: qsData.skipped, THE: theData.skipped, ARWU: arwuData.skipped };
+    const allExcluded = { QS: [], THE: theData.excluded || [], ARWU: [] };
     const reviewQueues = { QS: qsData.reviewQueue, THE: theData.reviewQueue, ARWU: arwuData.reviewQueue };
 
-    const validationReport = generateValidationReport(allResults, allSkipped, reviewQueues);
+    const validationReport = generateValidationReport(allResults, allSkipped, reviewQueues, allExcluded);
     console.log(validationReport);
 
     // Collect all items needing review

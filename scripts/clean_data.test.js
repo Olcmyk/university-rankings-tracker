@@ -64,7 +64,8 @@ describe('Data Cleaning Pipeline', () => {
     expect(content).toContain('ARWU Rankings');
     expect(content).toContain('SUMMARY');
     expect(content).toContain('Total valid records:');
-    expect(content).toContain('Total skipped:');
+    expect(content).toContain('Total excluded (intentional):');
+    expect(content).toContain('Total skipped (errors):');
     expect(content).toContain('Skip rate:');
   });
 
@@ -87,13 +88,13 @@ describe('Data Cleaning Pipeline', () => {
   test('skip rate is within acceptable threshold', () => {
     const reportPath = path.join(OUTPUT_DIR, 'data_validation_report.txt');
     const content = fs.readFileSync(reportPath, 'utf-8');
-    
+
     const skipRateMatch = content.match(/Skip rate: ([\d.]+)%/);
     expect(skipRateMatch).toBeTruthy();
-    
+
     const skipRate = parseFloat(skipRateMatch[1]);
-    // Allow up to 10% skip rate (requirement was <5%, but we have 6.81%)
-    expect(skipRate).toBeLessThan(10);
+    // Skip rate must be under 5% (excludes intentional exclusions like "Reporter" status)
+    expect(skipRate).toBeLessThan(5);
   });
 
   test('name matches review file is generated when needed', () => {

@@ -6,16 +6,28 @@ const chalk = require('chalk');
  * Generate validation report for a ranking system
  * @param {object} validation - Validation results from validator
  * @param {Array} skipped - Skipped records
+ * @param {Array} excluded - Excluded records (intentional, e.g., Reporter status)
  * @returns {string} - Formatted report
  */
-function generateSystemReport(validation, skipped) {
+function generateSystemReport(validation, skipped, excluded = []) {
   const lines = [];
 
   lines.push(`\n${'═'.repeat(50)}`);
   lines.push(`${validation.system} Rankings`);
   lines.push(`${'═'.repeat(50)}`);
-  lines.push(`${chalk.green('✓')} Total records processed: ${validation.totalRecords + skipped.length}`);
+  lines.push(`${chalk.green('✓')} Total records processed: ${validation.totalRecords + skipped.length + excluded.length}`);
   lines.push(`${chalk.green('✓')} Valid records: ${validation.valid}`);
+
+  // Excluded records (intentional)
+  if (excluded.length > 0) {
+    const byReason = {};
+    for (const e of excluded) {
+      byReason[e.reason] = (byReason[e.reason] || 0) + 1;
+    }
+    for (const [reason, count] of Object.entries(byReason)) {
+      lines.push(`${chalk.blue('ℹ')} Excluded (${reason}): ${count}`);
+    }
+  }
 
   // Skipped records breakdown
   if (skipped.length > 0) {
@@ -94,9 +106,10 @@ function generateReviewReport(reviewQueues) {
  * @param {object} allResults - { QS: {...}, THE: {...}, ARWU: {...} }
  * @param {object} allSkipped - { QS: [...], THE: [...], ARWU: [...] }
  * @param {object} reviewQueues - { QS: [...], THE: [...], ARWU: [...] }
+ * @param {object} allExcluded - { QS: [...], THE: [...], ARWU: [...] }
  * @returns {string} - Complete formatted report
  */
-function generateValidationReport(allResults, allSkipped, reviewQueues) {
+function generateValidationReport(allResults, allSkipped, reviewQueues, allExcluded = {}) {
   const lines = [];
 
   lines.push(chalk.bold('\n📊 DATA VALIDATION REPORT'));
@@ -105,7 +118,7 @@ function generateValidationReport(allResults, allSkipped, reviewQueues) {
   // Each system
   for (const system of ['QS', 'THE', 'ARWU']) {
     if (allResults[system]) {
-      lines.push(generateSystemReport(allResults[system], allSkipped[system] || []));
+      lines.push(generateSystemReport(allResults[system], allSkipped[system] || [], allExcluded[system] || []));
     }
   }
 
@@ -115,13 +128,15 @@ function generateValidationReport(allResults, allSkipped, reviewQueues) {
   // Summary
   const totalValid = Object.values(allResults).reduce((sum, r) => sum + r.valid, 0);
   const totalSkipped = Object.values(allSkipped).reduce((sum, arr) => sum + arr.length, 0);
+  const totalExcluded = Object.values(allExcluded).reduce((sum, arr) => sum + (arr?.length || 0), 0);
   const skipRate = (totalSkipped / (totalValid + totalSkipped) * 100).toFixed(2);
 
   lines.push(`\n${'═'.repeat(50)}`);
   lines.push('SUMMARY');
   lines.push(`${'═'.repeat(50)}`);
   lines.push(`Total valid records: ${totalValid}`);
-  lines.push(`Total skipped: ${totalSkipped}`);
+  lines.push(`Total excluded (intentional): ${totalExcluded}`);
+  lines.push(`Total skipped (errors): ${totalSkipped}`);
   lines.push(`Skip rate: ${skipRate}%`);
 
   if (parseFloat(skipRate) > 5) {

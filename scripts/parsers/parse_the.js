@@ -7,12 +7,13 @@ const { standardizeName } = require('../utils/name_standardizer');
 /**
  * Parse Times Higher Education Rankings data
  * @param {object} canonicalDict - Canonical names dictionary
- * @returns {Promise<{ records: Array, skipped: Array, reviewQueue: Array }>}
+ * @returns {Promise<{ records: Array, skipped: Array, reviewQueue: Array, excluded: Array }>}
  */
 async function parseTHE(canonicalDict) {
   const baseDir = 'times2011-2026/outputs/csv';
   const records = [];
   const skipped = [];
+  const excluded = []; // Track intentionally excluded records (e.g., "Reporter" status)
   const reviewMap = new Map(); // Deduplicate review entries
   const seenPairs = new Set(); // Track (university, year) duplicates
 
@@ -39,6 +40,12 @@ async function parseTHE(canonicalDict) {
             // Validate year
             if (!year || year < 2011 || year > 2026) {
               skipped.push({ reason: 'invalid_year', file, row });
+              continue;
+            }
+
+            // Check for "Reporter" status (universities that participated but weren't ranked)
+            if (rawRank === 'Reporter') {
+              excluded.push({ reason: 'reporter_status', file, row });
               continue;
             }
 
@@ -101,6 +108,7 @@ async function parseTHE(canonicalDict) {
   return {
     records,
     skipped,
+    excluded,
     reviewQueue: Array.from(reviewMap.values())
   };
 }
