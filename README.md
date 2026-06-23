@@ -1,88 +1,48 @@
 # University Rankings Tracker
 
-A static web application to visualize university ranking trends across QS, THE, and ARWU over 20+ years.
+Track and visualize university ranking trends across QS, THE, and ARWU (2003-2027).
+
+🔗 **Live Demo**: [Coming soon]
 
 ## Features
 
-- 🔍 Search 2,450+ universities with fuzzy matching
-- 📊 Interactive line charts showing ranking trends
-- 🎯 Filter by time range (5/10/15 years, or all data)
-- ⚡ Fast client-side processing (no backend)
-- 📱 Responsive design
+- 🔍 **Smart Search** - Fuzzy search across 4,300+ universities
+- 📊 **Interactive Charts** - Visualize ranking trends over 20+ years
+- 🎯 **Three Ranking Systems** - QS, Times Higher Education, and ARWU
+- 📅 **Time Range Filter** - View 5, 10, 15 years or all data
+- 📈 **Logarithmic Scale** - Better visualization for large ranking changes
+- ✅ **Custom View** - Toggle ranking systems with checkboxes
+- 📱 **Responsive Design** - Works on all devices
+- ⚡ **Fast** - Pure client-side, no backend needed
 
 ## Tech Stack
 
 - React 18 + Vite
-- Chart.js for visualizations
-- Fuse.js for fuzzy search
-- Tailwind CSS for styling
-- Deployed on Vercel
+- Chart.js 4.x
+- Fuse.js (fuzzy search)
+- Tailwind CSS
+- React Router v6
 
-## Development
-
-### Prerequisites
-
-- Node.js 18+
-- npm
-
-### Setup
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/Olcmyk/university-rankings.git
-   cd university-rankings
-   ```
-
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-3. Process ranking data:
-   ```bash
-   npm run process-data
-   ```
-
-4. Start dev server:
-   ```bash
-   npm run dev
-   ```
-
-5. Open http://localhost:5173
-
-### Build
+## Quick Start
 
 ```bash
-npm run build
-npm run preview  # Preview production build
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
 ```
 
-### Testing
-
-```bash
-npm test
-```
+Visit http://localhost:5173
 
 ## Data Sources
 
 - **QS World University Rankings** (2017-2027)
-- **Times Higher Education Rankings** (2011-2026)
-- **Academic Ranking of World Universities / Shanghai Ranking** (2003-2025)
+- **Times Higher Education** (2011-2026)
+- **ARWU / Shanghai Ranking** (2003-2025)
 
-## Deployment
-
-This project is configured for Vercel deployment:
-
-1. Push to GitHub
-2. Import project in Vercel dashboard
-3. Vercel auto-deploys on push to main branch
-
-Alternatively, deploy via CLI:
-```bash
-npm install -g vercel
-vercel --prod
-```
+Total: 48,178 records covering 4,301 universities worldwide
 
 ## License
 
-MIT
+MIT - see [LICENSE](LICENSE) file
