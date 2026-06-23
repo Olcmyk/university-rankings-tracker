@@ -139,6 +139,12 @@ export function UniversityChart({ universityData, timeRange, visibleSystems, use
           label: (context) => {
             const label = context.dataset.label || '';
             const year = context.label;
+            const value = context.parsed.y;
+
+            // If this point has no data (null), don't show anything
+            if (value === null || value === undefined) {
+              return null;
+            }
 
             // Determine which ranking system this is
             let systemKey = '';
