@@ -7,7 +7,8 @@
     "doc": "docs"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
+    "test:watch": "jest --watch",
     "clean-data": "node scripts/clean_data.js"
   },
   "keywords": [],
@@ -15,10 +16,16 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "chalk": "^5.6.2",
+    "chalk": "^4.1.2",
     "fast-csv": "^5.0.7",
     "papaparse": "^5.5.4",
     "string-similarity": "^4.0.4",
     "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@babel/core": "^8.0.1",
+    "@babel/preset-env": "^8.0.2",
+    "babel-jest": "^30.4.1",
+    "jest": "^30.4.2"
   }
 }
