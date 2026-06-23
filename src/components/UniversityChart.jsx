@@ -1,9 +1,10 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
+  LogarithmicScale,
   PointElement,
   LineElement,
   Title,
@@ -16,6 +17,7 @@ import { filterByTimeRange } from '../utils/timeRangeFilter';
 ChartJS.register(
   CategoryScale,
   LinearScale,
+  LogarithmicScale,
   PointElement,
   LineElement,
   Title,
@@ -23,12 +25,7 @@ ChartJS.register(
   Legend
 );
 
-export function UniversityChart({ universityData, timeRange }) {
-  const [visibleDatasets, setVisibleDatasets] = useState({
-    qs: true,
-    the: true,
-    arwu: true,
-  });
+export function UniversityChart({ universityData, timeRange, visibleSystems, useLogScale }) {
 
   const chartData = useMemo(() => {
     // Get current year for filtering
@@ -50,7 +47,7 @@ export function UniversityChart({ universityData, timeRange }) {
     // Build datasets
     const datasets = [];
 
-    if (visibleDatasets.qs) {
+    if (visibleSystems.qs) {
       const qsMap = new Map(qsData.map(r => [r.year, r.rank]));
       datasets.push({
         label: 'QS World University Rankings',
@@ -62,7 +59,7 @@ export function UniversityChart({ universityData, timeRange }) {
       });
     }
 
-    if (visibleDatasets.the) {
+    if (visibleSystems.the) {
       const theMap = new Map(theData.map(r => [r.year, r.rank]));
       datasets.push({
         label: 'Times Higher Education',
@@ -74,7 +71,7 @@ export function UniversityChart({ universityData, timeRange }) {
       });
     }
 
-    if (visibleDatasets.arwu) {
+    if (visibleSystems.arwu) {
       const arwuMap = new Map(arwuData.map(r => [r.year, r.rank]));
       datasets.push({
         label: 'ARWU (Shanghai Ranking)',
@@ -90,17 +87,18 @@ export function UniversityChart({ universityData, timeRange }) {
       labels: years,
       datasets,
     };
-  }, [universityData, timeRange, visibleDatasets]);
+  }, [universityData, timeRange, visibleSystems]);
 
-  const options = {
+  const options = useMemo(() => ({
     responsive: true,
     maintainAspectRatio: false,
     scales: {
       y: {
+        type: useLogScale ? 'logarithmic' : 'linear',
         reverse: true,
         title: {
           display: true,
-          text: 'World Rank',
+          text: useLogScale ? 'World Rank (Log Scale)' : 'World Rank',
           font: { size: 14, weight: '500' },
         },
         ticks: {
@@ -118,22 +116,6 @@ export function UniversityChart({ universityData, timeRange }) {
     plugins: {
       legend: {
         position: 'bottom',
-        onClick: (e, legendItem, legend) => {
-          const index = legendItem.datasetIndex;
-          const label = legendItem.text;
-
-          let system;
-          if (label.includes('QS')) system = 'qs';
-          else if (label.includes('THE')) system = 'the';
-          else if (label.includes('ARWU')) system = 'arwu';
-
-          if (system) {
-            setVisibleDatasets(prev => ({
-              ...prev,
-              [system]: !prev[system],
-            }));
-          }
-        },
       },
       tooltip: {
         mode: 'index',
@@ -150,7 +132,7 @@ export function UniversityChart({ universityData, timeRange }) {
     animation: {
       duration: 300,
     },
-  };
+  }), [useLogScale]);
 
   return (
     <div className="w-full h-96 bg-white border border-gray-200 rounded-lg p-6">
