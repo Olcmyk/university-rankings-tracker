@@ -83,7 +83,7 @@ export function SearchBox({ universities, onSelect }) {
   };
 
   const handleSelect = (university) => {
-    setQuery('');
+    setQuery(university.name);
     setIsOpen(false);
     onSelect(university);
   };
